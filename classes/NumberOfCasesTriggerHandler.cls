@@ -18,16 +18,16 @@ public with sharing class NumberOfCasesTriggerHandler {
             userIds.add(c.OwnerId);
         }
 
-        List<AggregateResult> countingCasesList = [SELECT count(Id), OwnerId
+        List<AggregateResult> countingCasesList = [SELECT count(Id), CreatedById
                                                 FROM Case
-                                                WHERE CreatedDate = THIS_MONTH AND OwnerId in :userIds
+                                                WHERE CreatedDate = THIS_MONTH AND CreatedById in :userIds
                                                 WITH SECURITY_ENFORCED
-                                                GROUP BY OwnerId];
+                                                GROUP BY CreatedById];
 
         System.debug('countingCasesList: ' + countingCasesList);
 
         for (AggregateResult result: countingCasesList) {
-            countingCasesMap.put((Id) result.get('OwnerId'), (Integer) result.get('expr0'));
+            countingCasesMap.put((Id) result.get('CreatedById'), (Integer) result.get('expr0'));
         }
 
         System.debug('countingCasesMap: ' + countingCasesMap);
